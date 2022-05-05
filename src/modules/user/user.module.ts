@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { PrismaService } from 'src/shared/infra/prisma/Prisma.service';
 import CreateAccountController from './infra/http/CreateAccount.controller';
 import CreateAvatarController from './infra/http/CreateAvatar.controller';
@@ -9,7 +11,13 @@ import CreateAvatarService from './services/CreateAvatar.service';
 import IndexAccountsService from './services/IndexAccounts.service';
 
 @Module({
-  imports: [],
+  imports: [
+    PassportModule,
+    JwtModule.register({
+      privateKey: process.env.JWT_SECRET_KEY,
+      signOptions: { expiresIn: '1d' },
+    }),
+  ],
   controllers: [
     CreateAccountController,
     CreateAvatarController,
