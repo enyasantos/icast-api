@@ -74,4 +74,26 @@ export default class UserAccountRepository implements IUserAccountRepository {
 
     return user;
   }
+
+  public async upgradeAccount(id: string): Promise<User> {
+    const userUpdated = await this.ormRepository.user.update({
+      where: { id },
+      data: {
+        role: 'PODCASTER',
+      },
+    });
+
+    return userUpdated;
+  }
+
+  public async downgradeAccount(id: string): Promise<User> {
+    const userUpdated = await this.ormRepository.user.update({
+      where: { id },
+      data: {
+        role: 'DEFAULT_USER',
+      },
+    });
+
+    return userUpdated;
+  }
 }

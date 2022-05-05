@@ -38,6 +38,7 @@ model User {
   country   String @default("Brazil")
   state     String
   city      String
+  role      String @default("DEFAULT_USER")
 
   podcasts Podcast[]
   avatar   Avatar[]
