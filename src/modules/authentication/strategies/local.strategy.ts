@@ -10,10 +10,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     @Inject('AuthenticationService')
     private authService: AuthenticationService,
   ) {
-    super({ usernameField: 'email' });
+    super({ usernameField: 'email', passwordField: 'password' });
   }
 
-  async validate(email: string, password: string) {
+  async validate(email: string, password: string): Promise<any> {
     const user = await this.authService.execute({ email, password });
 
     if (!user)

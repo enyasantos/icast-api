@@ -28,7 +28,6 @@ export default class CreateAccountService {
 
     const payload = {
       sub: user.id,
-      email: user.email,
     };
 
     delete user.password;
