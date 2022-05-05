@@ -10,25 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Podcast {
-  id          String @id @default(uuid())
-  file        String @unique
-  title       String
-  description String
-  cover       String
-
-  author   User   @relation(fields: [authorId], references: [id])
-  authorId String
-}
-
-model Avatar {
-  id       String @id @default(uuid())
-  filename String
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
-}
-
 model User {
   id        String @id @default(uuid())
   email     String @unique
@@ -42,4 +23,34 @@ model User {
 
   podcasts Podcast[]
   avatar   Avatar[]
+}
+
+model Avatar {
+  id       String @id @default(uuid())
+  filename String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+model Podcast {
+  id          String @id @default(uuid())
+  title       String
+  description String
+  cover       String
+
+  author   User      @relation(fields: [authorId], references: [id])
+  authorId String
+  Episode  Episode[]
+}
+
+model Episode {
+  id          String @id @default(uuid())
+  file        String @unique
+  title       String
+  description String
+  cover       String
+
+  podcast   Podcast @relation(fields: [podcastId], references: [id])
+  podcastId String
 }

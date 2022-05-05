@@ -5,7 +5,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 
 // Multer configuration
 export const multerConfig = {
-  dest: process.env.UPLOAD_LOCATION_AVATAR,
+  dest: process.env.UPLOAD_LOCATION_COVER_PODCAST,
 };
 
 // Multer upload options

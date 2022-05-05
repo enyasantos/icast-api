@@ -5,7 +5,8 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 
 // Multer configuration
 export const multerConfig = {
-  dest: process.env.UPLOAD_LOCATION_AVATAR,
+  destImage: process.env.UPLOAD_LOCATION_COVER_EPISODE,
+  destAudio: process.env.UPLOAD_LOCATION_EPISODE,
 };
 
 // Multer upload options
@@ -16,7 +17,7 @@ export const multerOptions = {
   },
   // Check the mimetypes to allow for upload
   fileFilter: (req: any, file: any, cb: any) => {
-    if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+    if (file.mimetype.match(/\/(mpeg|mp3|wav|flac|jpg|jpeg|png|gif)$/)) {
       // Allow storage of file
       cb(null, true);
     } else {
@@ -34,8 +35,12 @@ export const multerOptions = {
   storage: diskStorage({
     // Destination storage path details
     destination: (req: any, file: any, cb: any) => {
-      const uploadPath = multerConfig.dest;
       // Create folder if doesn't exist
+      const type = file.mimetype.split('/')[0];
+
+      const uploadPath =
+        type === 'audio' ? multerConfig.destAudio : multerConfig.destImage;
+
       if (!existsSync(uploadPath)) {
         mkdirSync(uploadPath);
       }
