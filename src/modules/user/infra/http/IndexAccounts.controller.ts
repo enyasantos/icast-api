@@ -1,5 +1,5 @@
 import { Controller, Inject, Get, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from 'src/shared/guard/JWTAuth.guard';
 import IndexAccountsService from '../../services/IndexAccounts.service';
 
 @Controller('user')
@@ -9,7 +9,7 @@ export default class IndexAccountsController {
     private indexAccountsService: IndexAccountsService,
   ) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Get()
   public async index() {
     const users = await this.indexAccountsService.execute();
