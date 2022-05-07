@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Podcast, PrismaClient } from '@prisma/client';
-import { EpisodeDTO } from 'src/modules/podcast/dto/EpisodeDTO';
 import { PodcastDTO } from 'src/modules/podcast/dto/PodcastDTO';
 import { IPodcastRepository } from 'src/modules/podcast/repositories/IPodcastRepository';
+import { PodcastFull } from 'src/modules/podcast/types/podcast';
 import { PrismaService } from 'src/shared/infra/prisma/Prisma.service';
 
 @Injectable()
@@ -24,24 +24,50 @@ export default class PodcastRepository implements IPodcastRepository {
     return podcast;
   }
 
-  public async showPodcast(id: string): Promise<Podcast> {
+  public async showPodcast(id: string): Promise<PodcastFull> {
     const podcast = await this.ormRepository.podcast.findUnique({
       where: { id },
+      include: {
+        Episode: true,
+        author: true,
+      },
     });
     return podcast;
   }
 
-  public async indexPodcasts(): Promise<Podcast[]> {
-    const podcasts = await this.ormRepository.podcast.findMany();
+  public async indexPodcasts(): Promise<PodcastFull[]> {
+    const podcasts = await this.ormRepository.podcast.findMany({
+      include: {
+        Episode: true,
+        author: true,
+      },
+    });
     return podcasts;
   }
 
-  public async indexUserPodcasts(authorId: string): Promise<Podcast[]> {
+  public async indexUserPodcasts(authorId: string): Promise<PodcastFull[]> {
     const podcasts = await this.ormRepository.podcast.findMany({
       where: { authorId },
       include: {
         Episode: true,
+        author: true,
       },
+    });
+    return podcasts;
+  }
+
+  public async indexPodcastsSpotlights(): Promise<PodcastFull[]> {
+    const podcasts = await this.ormRepository.podcast.findMany({
+      include: {
+        Episode: true,
+        author: true,
+      },
+      orderBy: {
+        Episode: {
+          _count: 'desc',
+        },
+      },
+      take: 8,
     });
     return podcasts;
   }

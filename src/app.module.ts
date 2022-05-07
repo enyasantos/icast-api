@@ -4,6 +4,7 @@ import { PodcastModule } from './modules/podcast/podcast.module';
 import { AuthenticationModule } from './modules/authentication/authentication.module';
 import { PrismaService } from './shared/infra/prisma/Prisma.service';
 import { ConfigModule } from '@nestjs/config';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),

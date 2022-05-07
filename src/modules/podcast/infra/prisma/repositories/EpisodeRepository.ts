@@ -28,4 +28,11 @@ export default class EpisodeRepository implements IEpisodeRepository {
     });
     return podcast;
   }
+
+  public async showEpisodes(episodeId: string): Promise<Episode> {
+    const apisode = await this.ormRepository.episode.findFirst({
+      where: { id: episodeId },
+    });
+    return apisode;
+  }
 }

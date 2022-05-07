@@ -7,7 +7,11 @@ import EpisodeRepository from './infra/prisma/repositories/EpisodeRepository';
 import PodcastRepository from './infra/prisma/repositories/PodcastRepository';
 import CreateEpisodeService from './services/CreateEpisode.service';
 import CreatePodcastService from './services/CreatePodcast.service';
+import IndexPodcastsService from './services/IndexPodcasts.service';
+import IndexPodcastsSpotlightsService from './services/IndexPodcastsSpotlights.service';
 import IndexUserPodcastsService from './services/IndexUserPodcasts.service';
+import ShowEpisodeService from './services/ShowEpisode.service';
+import ShowPodcastService from './services/ShowPodcast.service';
 
 @Module({
   imports: [
@@ -30,6 +34,22 @@ import IndexUserPodcastsService from './services/IndexUserPodcasts.service';
     {
       provide: 'IndexUserPodcastsService',
       useClass: IndexUserPodcastsService,
+    },
+    {
+      provide: 'ShowPodcastService',
+      useClass: ShowPodcastService,
+    },
+    {
+      provide: 'ShowEpisodeService',
+      useClass: ShowEpisodeService,
+    },
+    {
+      provide: 'IndexPodcastsService',
+      useClass: IndexPodcastsService,
+    },
+    {
+      provide: 'IndexPodcastsSpotlightsService',
+      useClass: IndexPodcastsSpotlightsService,
     },
     {
       provide: 'PodcastRepository',
