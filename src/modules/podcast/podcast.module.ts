@@ -10,6 +10,8 @@ import CreatePodcastService from './services/CreatePodcast.service';
 import IndexPodcastsService from './services/IndexPodcasts.service';
 import IndexPodcastsSpotlightsService from './services/IndexPodcastsSpotlights.service';
 import IndexUserPodcastsService from './services/IndexUserPodcasts.service';
+import RemoveEpisodeService from './services/RemoveEpisode.service';
+import RemovePodcastService from './services/RemovePodcast.service';
 import ShowEpisodeService from './services/ShowEpisode.service';
 import ShowPodcastService from './services/ShowPodcast.service';
 
@@ -50,6 +52,14 @@ import ShowPodcastService from './services/ShowPodcast.service';
     {
       provide: 'IndexPodcastsSpotlightsService',
       useClass: IndexPodcastsSpotlightsService,
+    },
+    {
+      provide: 'RemovePodcastService',
+      useClass: RemovePodcastService,
+    },
+    {
+      provide: 'RemoveEpisodeService',
+      useClass: RemoveEpisodeService,
     },
     {
       provide: 'PodcastRepository',

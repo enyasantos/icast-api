@@ -16,17 +16,17 @@ export default class EpisodeRepository implements IEpisodeRepository {
   }
 
   public async deleteEpisode(id: string): Promise<Episode> {
-    const podcast = await this.ormRepository.episode.delete({
+    const episode = await this.ormRepository.episode.delete({
       where: { id },
     });
-    return podcast;
+    return episode;
   }
 
   public async indexEpisodes(podcastId: string): Promise<Episode[]> {
-    const podcast = await this.ormRepository.episode.findMany({
+    const episodes = await this.ormRepository.episode.findMany({
       where: { podcastId },
     });
-    return podcast;
+    return episodes;
   }
 
   public async showEpisodes(episodeId: string): Promise<Episode> {

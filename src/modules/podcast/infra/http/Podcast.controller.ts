@@ -11,6 +11,7 @@ import {
   Get,
   Param,
   InternalServerErrorException,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/shared/guard/JWTAuth.guard';
@@ -19,6 +20,7 @@ import CreatePodcastService from '../../services/CreatePodcast.service';
 import IndexPodcastsService from '../../services/IndexPodcasts.service';
 import IndexPodcastsSpotlightsService from '../../services/IndexPodcastsSpotlights.service';
 import IndexUserPodcastsService from '../../services/IndexUserPodcasts.service';
+import RemovePodcastService from '../../services/RemovePodcast.service';
 import ShowPodcastService from '../../services/ShowPodcast.service';
 import { multerOptions } from '../../utils/multerConfigCoverPodcast';
 import { PodcastView } from '../../view/Podcast.view';
@@ -40,6 +42,9 @@ export default class PodcastController {
 
     @Inject('IndexPodcastsSpotlightsService')
     private indexPodcastsSpotlightsService: IndexPodcastsSpotlightsService,
+
+    @Inject('RemovePodcastService')
+    private removePodcastService: RemovePodcastService,
   ) {}
 
   @Post('create')
@@ -67,9 +72,12 @@ export default class PodcastController {
     const id = req.user.id;
     const podcasts = await this.indexUserPodcastsService.execute(id);
 
-    const podcastsView = new PodcastView().renderMany(podcasts);
+    if (podcasts) {
+      const podcastsView = new PodcastView().renderMany(podcasts);
+      return podcastsView;
+    }
 
-    return podcastsView;
+    return podcasts;
   }
 
   @Get('podcaster/:id')
@@ -77,8 +85,12 @@ export default class PodcastController {
   public async findByUser(@Param('id') id: string) {
     const podcasts = await this.indexUserPodcastsService.execute(id);
 
-    const podcastsView = new PodcastView().renderMany(podcasts);
-    return podcastsView;
+    if (podcasts) {
+      const podcastsView = new PodcastView().renderMany(podcasts);
+      return podcastsView;
+    }
+
+    return podcasts;
   }
 
   @Get(':id')
@@ -87,8 +99,12 @@ export default class PodcastController {
     try {
       const podcast = await this.showPodcastService.execute(id);
 
-      const podcastsView = new PodcastView().render(podcast);
-      return podcastsView;
+      if (podcast) {
+        const podcastsView = new PodcastView().render(podcast);
+        return podcastsView;
+      }
+
+      return podcast;
     } catch (error) {
       throw new InternalServerErrorException('');
     }
@@ -100,8 +116,12 @@ export default class PodcastController {
     try {
       const podcasts = await this.indexPodcastsService.execute();
 
-      const podcastsView = new PodcastView().renderMany(podcasts);
-      return podcastsView;
+      if (podcasts) {
+        const podcastsView = new PodcastView().renderMany(podcasts);
+        return podcastsView;
+      }
+
+      return podcasts;
     } catch (error) {
       throw new InternalServerErrorException('');
     }
@@ -113,10 +133,22 @@ export default class PodcastController {
     try {
       const podcasts = await this.indexPodcastsSpotlightsService.execute();
 
-      const podcastsView = new PodcastView().renderMany(podcasts);
-      return podcastsView;
+      if (podcasts) {
+        const podcastsView = new PodcastView().renderMany(podcasts);
+        return podcastsView;
+      }
+
+      return podcasts;
     } catch (error) {
       throw new InternalServerErrorException('');
     }
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  public async remove(@Param('id') id: string) {
+    const podcast = await this.removePodcastService.execute(id);
+
+    return { id: podcast.id };
   }
 }

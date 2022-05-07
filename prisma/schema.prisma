@@ -29,7 +29,7 @@ model Avatar {
   id       String @id @default(uuid())
   filename String
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @unique
 }
 
@@ -39,7 +39,7 @@ model Podcast {
   description String
   cover       String
 
-  author   User      @relation(fields: [authorId], references: [id])
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
   Episode  Episode[]
 }
@@ -51,6 +51,6 @@ model Episode {
   description String
   cover       String
 
-  podcast   Podcast @relation(fields: [podcastId], references: [id])
+  podcast   Podcast @relation(fields: [podcastId], references: [id], onDelete: Cascade)
   podcastId String
 }

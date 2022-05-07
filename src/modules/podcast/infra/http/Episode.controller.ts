@@ -10,11 +10,13 @@ import {
   UploadedFiles,
   Param,
   Get,
+  Delete,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/shared/guard/JWTAuth.guard';
 import { EpisodeDTO } from '../../dto/EpisodeDTO';
 import CreateEpisodeService from '../../services/CreateEpisode.service';
+import RemoveEpisodeService from '../../services/RemoveEpisode.service';
 import ShowEpisodeService from '../../services/ShowEpisode.service';
 import { multerOptions } from '../../utils/multerConfigEpisode';
 import { EpisodeView } from '../../view/Episode.view';
@@ -27,6 +29,9 @@ export default class EpisodeController {
 
     @Inject('ShowEpisodeService')
     private showEpisodeService: ShowEpisodeService,
+
+    @Inject('RemoveEpisodeService')
+    private removeEpisodeService: RemoveEpisodeService,
   ) {}
 
   @Post('create')
@@ -60,7 +65,11 @@ export default class EpisodeController {
       podcastId,
     });
 
-    return new EpisodeView().render(episode);
+    if (episode) {
+      return new EpisodeView().render(episode);
+    }
+
+    return episode;
   }
 
   @Get(':id')
@@ -68,6 +77,18 @@ export default class EpisodeController {
   public async show(@Param('id') id: string) {
     const episode = await this.showEpisodeService.execute(id);
 
-    return new EpisodeView().render(episode);
+    if (episode) {
+      return new EpisodeView().render(episode);
+    }
+
+    return episode;
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  public async remove(@Param('id') id: string) {
+    const episode = await this.removeEpisodeService.execute(id);
+
+    return { id: episode.id };
   }
 }
