@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'src/shared/infra/prisma/Prisma.service';
 import EpisodeController from './infra/http/Episode.controller';
 import PodcastController from './infra/http/Podcast.controller';
+import PodcastSpotlightsController from './infra/http/PodcastSpotlights.controller';
 import EpisodeRepository from './infra/prisma/repositories/EpisodeRepository';
 import PodcastRepository from './infra/prisma/repositories/PodcastRepository';
 import CreateEpisodeService from './services/CreateEpisode.service';
@@ -22,7 +23,11 @@ import ShowPodcastService from './services/ShowPodcast.service';
       signOptions: { expiresIn: '1d' },
     }),
   ],
-  controllers: [PodcastController, EpisodeController],
+  controllers: [
+    PodcastController,
+    EpisodeController,
+    PodcastSpotlightsController,
+  ],
   providers: [
     PrismaService,
     {

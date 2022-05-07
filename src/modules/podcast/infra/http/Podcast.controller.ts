@@ -127,23 +127,6 @@ export default class PodcastController {
     }
   }
 
-  @Get('spotlights')
-  @UseGuards(JwtAuthGuard)
-  public async spotlight() {
-    try {
-      const podcasts = await this.indexPodcastsSpotlightsService.execute();
-
-      if (podcasts) {
-        const podcastsView = new PodcastView().renderMany(podcasts);
-        return podcastsView;
-      }
-
-      return podcasts;
-    } catch (error) {
-      throw new InternalServerErrorException('');
-    }
-  }
-
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   public async remove(@Param('id') id: string) {
