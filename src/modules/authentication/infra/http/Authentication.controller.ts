@@ -11,7 +11,6 @@ import {
 import { JwtAuthGuard } from 'src/shared/guard/JWTAuth.guard';
 import { LocalAuthGuard } from 'src/shared/guard/LocalAuth.guard';
 import { AuthDTO } from '../../dtos/AuthDTO';
-import { RolesGuard } from '../../guards/roles.guard';
 import AuthenticationService from '../../services/Authentication.service';
 import UserSessionService from '../../services/UserSession.service';
 
@@ -33,7 +32,7 @@ export class AuthenticationController {
     return user;
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('session')
   async session(@Request() req: any) {
     const id = req.user.id;
