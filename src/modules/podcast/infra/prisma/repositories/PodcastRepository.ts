@@ -17,7 +17,7 @@ export default class PodcastRepository implements IPodcastRepository {
     return podcast;
   }
 
-  public async deletePodcast(id: string): Promise<Podcast> {
+  public async deletePodcast(id: string): Promise<PodcastFull> {
     const podcast = await this.ormRepository.podcast.delete({
       where: { id },
       include: {

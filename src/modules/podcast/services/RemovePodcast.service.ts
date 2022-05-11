@@ -10,8 +10,8 @@ export default class RemovePodcastService {
 
   public async execute(podcastId: string) {
     const podcastExist = await this.podcastRepository.showPodcast(podcastId);
-
     if (!podcastExist) throw new NotFoundException('Podcast not found');
+
     const podcast = await this.podcastRepository.deletePodcast(podcastId);
     return podcast;
   }
