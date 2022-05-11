@@ -7,8 +7,9 @@ import { AuthenticationController } from './infra/http/Authentication.controller
 import AuthenticationRepository from './infra/prisma/repositories/AuthenticationRepository';
 import AuthenticationService from './services/Authentication.service';
 import UserSessionService from './services/UserSession.service';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './guards/jwt.strategy';
+import { LocalStrategy } from './guards/local.strategy';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     PrismaService,
     LocalStrategy,
     JwtStrategy,
+    RolesGuard,
     {
       provide: 'AuthenticationService',
       useClass: AuthenticationService,

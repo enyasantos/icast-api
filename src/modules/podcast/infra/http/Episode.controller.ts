@@ -13,6 +13,9 @@ import {
   Delete,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { Role } from 'src/modules/authentication/config/role.enum';
+import { Roles } from 'src/modules/authentication/decorators/roles.decorator';
+import { RolesGuard } from 'src/modules/authentication/guards/roles.guard';
 import { JwtAuthGuard } from 'src/shared/guard/JWTAuth.guard';
 import { EpisodeDTO } from '../../dto/EpisodeDTO';
 import CreateEpisodeService from '../../services/CreateEpisode.service';
@@ -35,7 +38,8 @@ export default class EpisodeController {
   ) {}
 
   @Post('create')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Podcaster)
   @UseInterceptors(
     FileFieldsInterceptor(
       [
@@ -85,7 +89,8 @@ export default class EpisodeController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Podcaster, Role.Admin)
   public async remove(@Param('id') id: string) {
     const episode = await this.removeEpisodeService.execute(id);
 

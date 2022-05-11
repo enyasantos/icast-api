@@ -14,6 +14,9 @@ import {
   Delete,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Role } from 'src/modules/authentication/config/role.enum';
+import { Roles } from 'src/modules/authentication/decorators/roles.decorator';
+import { RolesGuard } from 'src/modules/authentication/guards/roles.guard';
 import { JwtAuthGuard } from 'src/shared/guard/JWTAuth.guard';
 import { PodcastDTO } from '../../dto/PodcastDTO';
 import CreatePodcastService from '../../services/CreatePodcast.service';
@@ -48,7 +51,8 @@ export default class PodcastController {
   ) {}
 
   @Post('create')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Podcaster)
   @UseInterceptors(FileInterceptor('cover', multerOptions))
   public async create(
     @Body(ValidationPipe) { title, description }: PodcastDTO,
@@ -67,7 +71,8 @@ export default class PodcastController {
   }
 
   @Get('me')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Podcaster)
   public async indexByUser(@Request() req: any) {
     const id = req.user.id;
     const podcasts = await this.indexUserPodcastsService.execute(id);
@@ -128,7 +133,8 @@ export default class PodcastController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Podcaster, Role.Admin)
   public async remove(@Param('id') id: string) {
     const podcast = await this.removePodcastService.execute(id);
 
