@@ -18,10 +18,10 @@ import { Role } from 'src/modules/authentication/config/role.enum';
 import { Roles } from 'src/modules/authentication/decorators/roles.decorator';
 import { RolesGuard } from 'src/modules/authentication/guards/roles.guard';
 import { JwtAuthGuard } from 'src/shared/guard/JWTAuth.guard';
+import { DeleteFile } from 'src/utils/removeFile';
 import { PodcastDTO } from '../../dto/PodcastDTO';
 import CreatePodcastService from '../../services/CreatePodcast.service';
 import IndexPodcastsService from '../../services/IndexPodcasts.service';
-import IndexPodcastsSpotlightsService from '../../services/IndexPodcastsSpotlights.service';
 import IndexUserPodcastsService from '../../services/IndexUserPodcasts.service';
 import RemovePodcastService from '../../services/RemovePodcast.service';
 import ShowPodcastService from '../../services/ShowPodcast.service';
@@ -43,9 +43,6 @@ export default class PodcastController {
     @Inject('IndexPodcastsService')
     private indexPodcastsService: IndexPodcastsService,
 
-    @Inject('IndexPodcastsSpotlightsService')
-    private indexPodcastsSpotlightsService: IndexPodcastsSpotlightsService,
-
     @Inject('RemovePodcastService')
     private removePodcastService: RemovePodcastService,
   ) {}
@@ -59,15 +56,19 @@ export default class PodcastController {
     @Request() req: any,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const id = req.user.id;
-    const podcast = await this.createPodcastService.execute({
-      cover: file.filename,
-      title,
-      description,
-      authorId: id,
-    });
+    try {
+      const id = req.user.id;
+      const podcast = await this.createPodcastService.execute({
+        cover: file.filename,
+        title,
+        description,
+        authorId: id,
+      });
 
-    return podcast;
+      return podcast;
+    } catch {
+      DeleteFile(`public/podcast/cover/${file.filename}`);
+    }
   }
 
   @Get('me')
@@ -137,6 +138,16 @@ export default class PodcastController {
   @Roles(Role.Podcaster, Role.Admin)
   public async remove(@Param('id') id: string) {
     const podcast = await this.removePodcastService.execute(id);
+
+    if (podcast) {
+      DeleteFile(`public/podcast/cover/${podcast.cover}`);
+      if (podcast.Episode) {
+        podcast.Episode.map((episode) => {
+          DeleteFile(`public/episode/cover/${episode.cover}`);
+          DeleteFile(`public/episode/file/${episode.file}`);
+        });
+      }
+    }
 
     return { id: podcast.id };
   }
