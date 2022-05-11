@@ -5,7 +5,6 @@ import {
   Post,
   UseGuards,
   ValidationPipe,
-  Request,
   UseInterceptors,
   UploadedFiles,
   Param,
@@ -13,8 +12,11 @@ import {
   Delete,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { Role } from 'src/modules/authentication/config/role.enum';
+import { Roles } from 'src/modules/authentication/decorators/roles.decorator';
+import { RolesGuard } from 'src/modules/authentication/guards/roles.guard';
 import { JwtAuthGuard } from 'src/shared/guard/JWTAuth.guard';
-import { EpisodeDTO } from '../../dto/EpisodeDTO';
+import { DeleteFile } from 'src/utils/removeFile';
 import CreateEpisodeService from '../../services/CreateEpisode.service';
 import RemoveEpisodeService from '../../services/RemoveEpisode.service';
 import ShowEpisodeService from '../../services/ShowEpisode.service';
@@ -34,8 +36,9 @@ export default class EpisodeController {
     private removeEpisodeService: RemoveEpisodeService,
   ) {}
 
-  @Post('create')
-  @UseGuards(JwtAuthGuard)
+  @Post('create/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Podcaster)
   @UseInterceptors(
     FileFieldsInterceptor(
       [
@@ -52,24 +55,30 @@ export default class EpisodeController {
     ),
   )
   public async create(
-    @Body(ValidationPipe) { title, description, podcastId }: EpisodeDTO,
-    @Request() req: any,
+    @Body(ValidationPipe)
+    { title, description }: { title: string; description: string },
+    @Param('id') id: string,
     @UploadedFiles()
     files: { cover?: Express.Multer.File[]; episode?: Express.Multer.File[] },
   ) {
-    const episode = await this.createEpisodeService.execute({
-      cover: files.cover[0].filename,
-      title,
-      description,
-      file: files.episode[0].filename,
-      podcastId,
-    });
+    try {
+      const episode = await this.createEpisodeService.execute({
+        cover: files.cover[0].filename,
+        title,
+        description,
+        file: files.episode[0].filename,
+        podcastId: id,
+      });
 
-    if (episode) {
-      return new EpisodeView().render(episode);
+      if (episode) {
+        return new EpisodeView().render(episode);
+      }
+
+      return episode;
+    } catch {
+      DeleteFile(`public/podcast/cover/${files.cover[0].filename}`);
+      DeleteFile(`public/episode/file/${files.episode[0].filename}`);
     }
-
-    return episode;
   }
 
   @Get(':id')
@@ -85,9 +94,15 @@ export default class EpisodeController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Podcaster, Role.Admin)
   public async remove(@Param('id') id: string) {
     const episode = await this.removeEpisodeService.execute(id);
+
+    if (episode) {
+      DeleteFile(`public/podcast/cover/${episode.cover}`);
+      DeleteFile(`public/episode/file/${episode.file}`);
+    }
 
     return { id: episode.id };
   }

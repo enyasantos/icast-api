@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import EpisodeRepository from '../infra/prisma/repositories/EpisodeRepository';
 
 @Injectable()
@@ -9,7 +9,8 @@ export default class RemoveEpisodeService {
   ) {}
 
   public async execute(episodeId: string) {
-    const podcast = await this.episodeRepository.deleteEpisode(episodeId);
-    return podcast;
+    const episode = await this.episodeRepository.deleteEpisode(episodeId);
+    if (!episode) throw new NotFoundException('Episode not found');
+    return episode;
   }
 }

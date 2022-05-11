@@ -6,6 +6,9 @@ import {
   Patch,
   Get,
 } from '@nestjs/common';
+import { Role } from 'src/modules/authentication/config/role.enum';
+import { Roles } from 'src/modules/authentication/decorators/roles.decorator';
+import { RolesGuard } from 'src/modules/authentication/guards/roles.guard';
 import { JwtAuthGuard } from 'src/shared/guard/JWTAuth.guard';
 import DowngradeAccountService from '../../services/DowngradeAccount.service';
 import ShowAccountService from '../../services/ShowAccont.service';
@@ -25,6 +28,8 @@ export default class RoleAccountController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Patch('upgrade')
   public async upgrade(@Request() req: any) {
     const id = req.user.id;
@@ -33,6 +38,8 @@ export default class RoleAccountController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Patch('downgrade')
   public async downgrade(@Request() req: any) {
     const id = req.user.id;
@@ -40,7 +47,8 @@ export default class RoleAccountController {
     return user;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Get()
   public async show(@Request() req: any) {
     const id = req.user.id;
