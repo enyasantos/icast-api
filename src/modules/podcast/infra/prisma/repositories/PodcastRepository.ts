@@ -20,7 +20,12 @@ export default class PodcastRepository implements IPodcastRepository {
   public async deletePodcast(id: string): Promise<Podcast> {
     const podcast = await this.ormRepository.podcast.delete({
       where: { id },
+      include: {
+        Episode: true,
+      },
     });
+
+    console.log(podcast);
     return podcast;
   }
 

@@ -21,7 +21,6 @@ import { JwtAuthGuard } from 'src/shared/guard/JWTAuth.guard';
 import { PodcastDTO } from '../../dto/PodcastDTO';
 import CreatePodcastService from '../../services/CreatePodcast.service';
 import IndexPodcastsService from '../../services/IndexPodcasts.service';
-import IndexPodcastsSpotlightsService from '../../services/IndexPodcastsSpotlights.service';
 import IndexUserPodcastsService from '../../services/IndexUserPodcasts.service';
 import RemovePodcastService from '../../services/RemovePodcast.service';
 import ShowPodcastService from '../../services/ShowPodcast.service';
@@ -42,9 +41,6 @@ export default class PodcastController {
 
     @Inject('IndexPodcastsService')
     private indexPodcastsService: IndexPodcastsService,
-
-    @Inject('IndexPodcastsSpotlightsService')
-    private indexPodcastsSpotlightsService: IndexPodcastsSpotlightsService,
 
     @Inject('RemovePodcastService')
     private removePodcastService: RemovePodcastService,
