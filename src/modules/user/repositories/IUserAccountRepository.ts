@@ -9,4 +9,6 @@ export interface IUserAccountRepository {
   show(id: string): Promise<User>;
   findByEmail(email: string): Promise<User>;
   addAvatar(data: UserAvatarDTO): Promise<Avatar>;
+  upgradeAccount(id: string): Promise<User>;
+  downgradeAccount(id: string): Promise<User>;
 }
