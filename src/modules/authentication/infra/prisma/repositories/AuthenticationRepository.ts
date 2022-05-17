@@ -17,6 +17,9 @@ export default class AuthenticationRepository
   public async validateUser({ email, password }: AuthDTO): Promise<User> {
     const user = await this.ormRepository.user.findUnique({
       where: { email },
+      include: {
+        avatar: true,
+      },
     });
 
     if (user) {
@@ -24,13 +27,23 @@ export default class AuthenticationRepository
       if (!isPasswordValid) return null;
     }
 
+    const pathAvatar = process.env.UPLOAD_LOCATION_AVATAR.substring(2);
+    user.avatar[0].filename = `${process.env.BASE_URL}/${pathAvatar}/${user.avatar[0].filename}`;
+
     return user;
   }
 
   public async findUserById(id: string): Promise<User> {
     const user = await this.ormRepository.user.findUnique({
       where: { id },
+      include: {
+        avatar: true,
+      },
     });
+
+    const pathAvatar = process.env.UPLOAD_LOCATION_AVATAR.substring(2);
+
+    user.avatar[0].filename = `${process.env.BASE_URL}/${pathAvatar}/${user.avatar[0].filename}`;
 
     return user;
   }
