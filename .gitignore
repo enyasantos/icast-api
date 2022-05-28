@@ -40,7 +40,7 @@ lerna-debug.log*
 #files
 /public/avatar/*
 !/public/avatar/default-user.png
-!/public/**/**/empty.txt
 /public/podcast/cover/*
 /public/episode/cover/*
 /public/episode/file/*
+!/public/**/**/empty.txt
