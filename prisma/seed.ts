@@ -60,6 +60,8 @@ async function main() {
             userId: createUser.id,
           },
         });
+
+        console.log(`Created avatar user with id: ${createUser.id}`);
       }
     }
   }

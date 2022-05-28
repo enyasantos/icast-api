@@ -39,6 +39,7 @@ lerna-debug.log*
 
 #files
 /public/avatar/*
+!/public/avatar/default-user.png
 /public/podcast/cover/*
 /public/episode/cover/*
 /public/episode/file/*
