@@ -38,8 +38,10 @@ export const multerOptions = {
       // Create folder if doesn't exist
       const type = file.mimetype.split('/')[0];
 
-      const uploadPath =
-        type === 'audio' ? multerConfig.destAudio : multerConfig.destImage;
+      const uploadPath = multerConfig.destImage;
+
+      // const uploadPath =
+      //   type === 'audio' ? multerConfig.destAudio : multerConfig.destImage;
 
       if (!existsSync(uploadPath)) {
         mkdirSync(uploadPath);
