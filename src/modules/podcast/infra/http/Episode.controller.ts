@@ -62,6 +62,7 @@ export default class EpisodeController {
     files: { cover?: Express.Multer.File[]; episode?: Express.Multer.File[] },
   ) {
     try {
+      console.log('file: ', files.episode[0]);
       const episode = await this.createEpisodeService.execute({
         cover: files.cover[0].filename,
         title,
