@@ -40,6 +40,8 @@ export const multerOptions = {
 
       const uploadPath = multerConfig.destImage;
 
+      console.info('File: ', file, type, multerConfig.destAudio);
+
       // const uploadPath =
       //   type === 'audio' ? multerConfig.destAudio : multerConfig.destImage;
 
