@@ -77,8 +77,8 @@ export default class EpisodeController {
       return episode;
     } catch (error) {
       console.error(error);
-      DeleteFile(`public/podcast/cover/${files.cover[0].filename}`);
-      DeleteFile(`public/episode/file/${files.episode[0].filename}`);
+      //DeleteFile(`public/podcast/cover/${files.cover[0].filename}`);
+      //DeleteFile(`public/episode/file/${files.episode[0].filename}`);
     }
   }
 
