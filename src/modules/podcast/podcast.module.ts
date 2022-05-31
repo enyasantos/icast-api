@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'src/shared/infra/prisma/Prisma.service';
 import EpisodeController from './infra/http/Episode.controller';
 import PodcastController from './infra/http/Podcast.controller';
+import PodcastSearchController from './infra/http/PodcastSearch.controller';
 import PodcastSpotlightsController from './infra/http/PodcastSpotlights.controller';
 import EpisodeRepository from './infra/prisma/repositories/EpisodeRepository';
 import PodcastRepository from './infra/prisma/repositories/PodcastRepository';
@@ -13,6 +14,7 @@ import IndexPodcastsSpotlightsService from './services/IndexPodcastsSpotlights.s
 import IndexUserPodcastsService from './services/IndexUserPodcasts.service';
 import RemoveEpisodeService from './services/RemoveEpisode.service';
 import RemovePodcastService from './services/RemovePodcast.service';
+import SearchPodcastService from './services/SearchPodcast.service';
 import ShowEpisodeService from './services/ShowEpisode.service';
 import ShowPodcastService from './services/ShowPodcast.service';
 
@@ -27,6 +29,7 @@ import ShowPodcastService from './services/ShowPodcast.service';
     PodcastController,
     EpisodeController,
     PodcastSpotlightsController,
+    PodcastSearchController,
   ],
   providers: [
     PrismaService,
@@ -65,6 +68,10 @@ import ShowPodcastService from './services/ShowPodcast.service';
     {
       provide: 'RemoveEpisodeService',
       useClass: RemoveEpisodeService,
+    },
+    {
+      provide: 'SearchPodcastService',
+      useClass: SearchPodcastService,
     },
     {
       provide: 'PodcastRepository',

@@ -36,6 +36,8 @@ const userData: Prisma.UserCreateInput[] = [
   },
 ];
 
+const avatar = 'default-user.png';
+
 async function main() {
   console.log(`Start seeding ...`);
   for (const user of userData) {
@@ -50,6 +52,17 @@ async function main() {
       });
 
       console.log(`Created user with id: ${createUser.id}`);
+
+      if (createUser) {
+        await prisma.avatar.create({
+          data: {
+            filename: avatar,
+            userId: createUser.id,
+          },
+        });
+
+        console.log(`Created avatar user with id: ${createUser.id}`);
+      }
     }
   }
 

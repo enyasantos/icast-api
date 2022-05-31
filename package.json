@@ -13,7 +13,8 @@
         "start:dev": "nest start --watch",
         "start:debug": "nest start --debug --watch",
         "start:prod": "node dist/main",
-        "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+        "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+        "heroku-postbuild": "NODE_ENV=dev npm install --omit --no-shrinkwrap && npm run build"
     },
     "prisma": {
         "seed": "ts-node prisma/seed.ts"
@@ -26,6 +27,7 @@
         "@nestjs/passport": "^8.2.1",
         "@nestjs/platform-express": "^8.0.0",
         "@nestjs/serve-static": "^2.2.2",
+        "@prisma/client": "^3.14.0",
         "bcrypt": "^5.0.1",
         "class-transformer": "^0.5.1",
         "class-validator": "^0.13.2",
@@ -41,7 +43,6 @@
         "@nestjs/cli": "^8.0.0",
         "@nestjs/schematics": "^8.0.0",
         "@nestjs/testing": "^8.0.0",
-        "@prisma/client": "^3.13.0",
         "@types/bcrypt": "^5.0.0",
         "@types/express": "^4.17.13",
         "@types/jest": "27.0.2",

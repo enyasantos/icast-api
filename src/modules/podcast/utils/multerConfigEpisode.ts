@@ -36,10 +36,11 @@ export const multerOptions = {
     // Destination storage path details
     destination: (req: any, file: any, cb: any) => {
       // Create folder if doesn't exist
-      const type = file.mimetype.split('/')[0];
-
+      const fieldname = file.fieldname;
       const uploadPath =
-        type === 'audio' ? multerConfig.destAudio : multerConfig.destImage;
+        fieldname === 'episode'
+          ? multerConfig.destAudio
+          : multerConfig.destImage;
 
       if (!existsSync(uploadPath)) {
         mkdirSync(uploadPath);

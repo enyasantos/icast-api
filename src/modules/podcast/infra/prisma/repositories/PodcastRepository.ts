@@ -76,4 +76,24 @@ export default class PodcastRepository implements IPodcastRepository {
     });
     return podcasts;
   }
+
+  public async searchPodcast(keyword: string): Promise<PodcastFull[]> {
+    const podcasts = await this.ormRepository.podcast.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              startsWith: keyword,
+              mode: 'insensitive',
+            },
+          },
+        ],
+      },
+      include: {
+        Episode: true,
+        author: true,
+      },
+    });
+    return podcasts;
+  }
 }

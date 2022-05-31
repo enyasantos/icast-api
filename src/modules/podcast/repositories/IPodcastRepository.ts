@@ -9,4 +9,5 @@ export interface IPodcastRepository {
   indexPodcasts(): Promise<PodcastFull[]>;
   indexUserPodcasts(authorId: string): Promise<PodcastFull[]>;
   indexPodcastsSpotlights(): Promise<PodcastFull[]>;
+  searchPodcast(keyword: string): Promise<PodcastFull[]>;
 }
