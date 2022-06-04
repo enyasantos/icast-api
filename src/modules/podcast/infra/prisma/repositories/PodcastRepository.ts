@@ -87,6 +87,32 @@ export default class PodcastRepository implements IPodcastRepository {
               mode: 'insensitive',
             },
           },
+          {
+            description: {
+              contains: keyword,
+              mode: 'insensitive',
+            },
+          },
+          {
+            OR: [
+              {
+                author: {
+                  firstName: {
+                    startsWith: keyword,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+              {
+                author: {
+                  lastName: {
+                    startsWith: keyword,
+                    mode: 'insensitive',
+                  },
+                },
+              },
+            ],
+          },
         ],
       },
       include: {
