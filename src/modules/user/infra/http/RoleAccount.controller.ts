@@ -28,8 +28,7 @@ export default class RoleAccountController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard)
   @Patch('upgrade')
   public async upgrade(@Request() req: any) {
     const id = req.user.id;
@@ -38,8 +37,7 @@ export default class RoleAccountController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard)
   @Patch('downgrade')
   public async downgrade(@Request() req: any) {
     const id = req.user.id;
